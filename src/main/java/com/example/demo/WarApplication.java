@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * @author mort
@@ -17,8 +18,9 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  *
  **/
 @MapperScan("com.demo.dao")
+@EnableSwagger2
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
-@SpringBootApplication(scanBasePackages = {"com.example","com.service"})
+@SpringBootApplication(scanBasePackages = {"com.example","com.service", "com.demo"})
 public class WarApplication extends SpringBootServletInitializer {
 
     @Override
