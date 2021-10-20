@@ -10,7 +10,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2                // Swagger的开关，表示已经启用Swagger
+@EnableSwagger2                // Swagger的开关，表示已经启用Swagger   项目里实现的话 实现docs文档里自动的驼峰转下划线给前端
 @Configuration
 public class SwaggerConfigDemo {
 
@@ -25,6 +25,11 @@ public class SwaggerConfigDemo {
 //
 //        @Value("${swagger.version}")
 //        private String version;         // 当前文档的版本
+
+    /**
+     * 如果是swagger前后端分离的话  前端域名和后端服务不一样会出现跨域问题  服务端后端要设置一个filter支持前端域名的跨域问题
+     * @return
+     */
 
         @Bean
         public Docket createRestApi() {
