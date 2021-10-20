@@ -39,6 +39,14 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * 等同于springMvc里的controller方法切面  <mvc:argument-resolvers>
+     *
+     *         <mvc:annotation-driven>
+     *         <mvc:argument-resolvers>
+     *             <bean class="com.demo.config.ContextWebArgumentResolverr"/>
+     *         </mvc:argument-resolvers>
+     *     </mvc:annotation-driven>
+     *
+     *
      * @param argumentResolvers
      */
     @Override
