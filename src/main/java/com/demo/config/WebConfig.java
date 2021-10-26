@@ -30,7 +30,10 @@ public class WebConfig implements WebMvcConfigurer {
 
      private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
-    private static final List<String> VALUE = Lists.newArrayList("*");
+
+    private static final List<String> VALUE = Lists.newArrayList("*.bilibili.com", "*.bilibili.co");
+
+    private static final List<String> DEFAULT_VALUE = Lists.newArrayList("*");
 
     @PostConstruct
     public void init() {
@@ -91,8 +94,7 @@ public class WebConfig implements WebMvcConfigurer {
 
     private CorsConfiguration corsConfig() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOriginPattern("*");  //低版本不支持
-        corsConfiguration.setAllowedMethods(VALUE);
+        corsConfiguration.setAllowedMethods(DEFAULT_VALUE);
 //        corsConfiguration.setAllowedOrigins(VALUE);     //设置setAllowCredentials 只能用addAllowedOriginPattern  不然会报错
         corsConfiguration.setAllowedOriginPatterns(VALUE);
         corsConfiguration.setAllowCredentials(true);
