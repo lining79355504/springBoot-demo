@@ -8,6 +8,11 @@ import java.io.Serializable;
 /**
  * Author:  lining17
  * Date :  2019-07-10
+ *
+ * jackson
+ *
+ * @JsonUnwrapped  扁平化对象 会把对象内部的field抽到外层里  （抽出嵌套）
+ *
  */
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class GreetingDto implements Serializable {

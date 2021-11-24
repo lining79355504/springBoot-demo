@@ -31,7 +31,7 @@ public class WebConfig implements WebMvcConfigurer {
      private static final Logger log = LoggerFactory.getLogger(WebConfig.class);
 
 
-    private static final List<String> VALUE = Lists.newArrayList("*.bilibili.com", "*.bilibili.co");
+    private static final List<String> VALUE = Lists.newArrayList("*.baidu.com", "*.baidu.co");
 
     private static final List<String> DEFAULT_VALUE = Lists.newArrayList("*");
 
