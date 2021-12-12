@@ -4,6 +4,8 @@ package com.example.demo;
  * Author:  lining17
  * Date :  2019-07-10
  */
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.demo.entity.Context;
@@ -14,6 +16,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +34,9 @@ public class GreetingController {
     private final AtomicLong counter = new AtomicLong();
 
     @Autowired
+    private JdbcTemplate jdbcTemplate;
+
+    @Autowired
     private GreetingService greetingService;
 
     @ApiOperation(value = "greeting 方法")
@@ -40,6 +46,7 @@ public class GreetingController {
 //        return new GreetingDto(counter.incrementAndGet(),
 //                String.format(template, mobileTagValue.toString()), "test");
         logger.info("paramDto  {}", paramDto);
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList("select * from alert limit 10");
         return new GreetingDto(counter.incrementAndGet(),
                 "content", "test");
     }
