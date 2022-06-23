@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.google.common.collect.Lists;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
@@ -8,6 +9,8 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.List;
 
 /**
  * @author mort
@@ -29,6 +32,7 @@ public class WarApplication extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
+        List<List<Integer>> parts = Lists.partition(Lists.newArrayList(1, 2, 3), 200);
         SpringApplication.run(WarApplication.class, args);
     }
 }
