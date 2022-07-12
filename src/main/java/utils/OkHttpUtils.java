@@ -29,7 +29,7 @@ public class OkHttpUtils {
                 .build();
 
         try (Response response = client.newCall(request).execute()) {
-            return response.body().string();
+            return String.valueOf(response.body());
         }
     }
 
