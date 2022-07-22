@@ -16,7 +16,7 @@ import static org.springframework.web.bind.support.WebArgumentResolver.UNRESOLVE
  * 上下文Context解析器   filter中根据cookie 登录态等信息获取到登录者的信息 放在header里 这里从header里解析出来放到 每一个拦截方法的Context的参数里 这里解析到每一个controller里的参数里
  *
  *
- * @See com.example.demo.GreetingController#greeting(com.demo.entity.Context, com.example.demo.ParamDto)
+ * @See com.example.demo.controller.GreetingController#greeting(com.demo.entity.Context, com.example.demo.ParamDto)
  */
 public class ContextWebArgumentResolver implements HandlerMethodArgumentResolver {
 

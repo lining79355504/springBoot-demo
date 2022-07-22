@@ -1,5 +1,6 @@
 package com.service.es;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
 
@@ -43,6 +45,7 @@ public class AccTradingFlowDayPo {
     @Field(type = FieldType.Keyword)
     private Integer agent_id;
 
+    @JSONField(format ="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "Asia/Shanghai", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp mtime;
     @Field(type = FieldType.Keyword)
@@ -64,10 +67,12 @@ public class AccTradingFlowDayPo {
 
     private Long special_red_packet_balance;
 
+    @JSONField(format ="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "Asia/Shanghai", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp date;
     private Long special_red_packet_recharge;
 
+    @JSONField(format ="yyyy-MM-dd HH:mm:ss")
     @JsonFormat(timezone = "Asia/Shanghai", pattern = "yyyy-MM-dd HH:mm:ss")
     private Timestamp ctime;
     private Long cash_balance;

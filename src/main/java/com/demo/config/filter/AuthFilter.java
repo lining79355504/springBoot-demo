@@ -35,9 +35,11 @@ public class AuthFilter implements Filter {
         if (token != null) {
             //    :TODO check token
             log.info("auth success");
-            chain.doFilter(request, response);
+//            chain.doFilter(request, response);
         } else {
             log.error("auth failed");
         }
+
+        chain.doFilter(request, response);
     }
 }

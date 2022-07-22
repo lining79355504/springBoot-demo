@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -16,8 +17,11 @@ import java.util.Map;
 @Configuration
 public class FilterConfig {
 
-    @Value("${value}")
+    @Value("${value:asas}")
     private String value;
+
+    @Value("#{'${id:1,2,3}'.split(',')}")
+    private List<Integer> ids;
 
     @Bean
     public FilterRegistrationBean registerAuthFilter() {
@@ -41,7 +45,7 @@ public class FilterConfig {
      *
      * @return
      */
-    @Bean(name = "authFilter")
+    @Bean(name = "authFilterBean")
     public AuthFilter authFilter() {
         return new AuthFilter();
     }
