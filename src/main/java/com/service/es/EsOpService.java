@@ -20,11 +20,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -41,6 +44,9 @@ public class EsOpService {
     @Qualifier("elasticsearchClientAlpha")
     @Autowired
     RestHighLevelClient highLevelClient;
+
+
+    private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
     /**
      * @param entity
@@ -115,9 +121,9 @@ public class EsOpService {
      *
      * @param indexName
      * @param pos
-     * @param <T>
+     * @param <?>
      */
-    public <T> void bulk(String indexName, List<T> pos) {
+    public void bulk(String indexName, List<?> pos) {
 
         if (CollectionUtils.isEmpty(pos)) {
             return;
@@ -145,6 +151,22 @@ public class EsOpService {
         }
     }
 
+    /**
+     * Working with Spring Data Repositories
+     * @param pos
+     * @param <T>
+     * @return
+     */
+    public <T> Iterable<T> saveAll(Iterable<T> pos) {
+        return elasticsearchRestTemplate.save(pos);
+    }
 
 
+    /**
+     * Working with Spring Data Repositories
+     */
+    @PostConstruct
+    public void setElasticsearchRestTemplate() {
+        this.elasticsearchRestTemplate = new ElasticsearchRestTemplate(highLevelClient);
+    }
 }
