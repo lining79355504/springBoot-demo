@@ -195,4 +195,21 @@ public class DemoApplicationTests {
 
 
 	}
+
+
+
+
+	public <T> void test(String indexName, List<T> pos) {
+
+	}
+
+
+	public <E, T> void test1(String indexName, T t) {
+
+	}
+
+	public String test1(String indexName, List<?> t) {
+
+		return null;
+	}
 }

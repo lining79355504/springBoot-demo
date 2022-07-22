@@ -153,6 +153,7 @@ public class EsOpService {
 
     /**
      * Working with Spring Data Repositories
+     * 可以利用到一些org.springframework.data.elasticsearch.annotations包内的注解功能
      * @param pos
      * @param <T>
      * @return
@@ -164,6 +165,7 @@ public class EsOpService {
 
     /**
      * Working with Spring Data Repositories
+     * 可以利用到一些org.springframework.data.elasticsearch.annotations包内的注解功能
      */
     @PostConstruct
     public void setElasticsearchRestTemplate() {
