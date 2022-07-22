@@ -169,4 +169,8 @@ public class EsOpService {
     public void setElasticsearchRestTemplate() {
         this.elasticsearchRestTemplate = new ElasticsearchRestTemplate(highLevelClient);
     }
+
+    public ElasticsearchRestTemplate getElasticsearchRestTemplate() {
+        return elasticsearchRestTemplate;
+    }
 }
