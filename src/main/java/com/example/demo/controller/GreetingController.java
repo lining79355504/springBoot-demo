@@ -14,9 +14,11 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.demo.entity.Context;
 import com.example.demo.GreetingDto;
 import com.example.demo.ParamDto;
+import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.service.GreetingService;
 import com.service.es.AccTradingFlowDayPo;
 import com.service.es.EsOpService;
+import com.service.hystrix.CommandHelloFailure;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -25,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -73,4 +76,19 @@ public class GreetingController {
         return new GreetingDto(counter.incrementAndGet(),
                 "content", "test");
     }
+
+
+    @ApiOperation(value = "greeting 方法")
+    @RequestMapping(value = "/cricuit_test", method = RequestMethod.GET)
+    public String circuitTest(@ApiIgnore Context context, ParamDto paramDto) {
+        return new CommandHelloFailure(HystrixCommandGroupKey.Factory.asKey("ExampleGroup")).execute();
+    }
+
+
+    @RequestMapping(value = "/change_cricuit_value", method = RequestMethod.GET)
+    public String changeCircuitValue(@RequestParam("time") Integer value) {
+        new CommandHelloFailure(HystrixCommandGroupKey.Factory.asKey("ExampleGroup")).changeRunTest(value);
+        return "success";
+    }
+
 }
