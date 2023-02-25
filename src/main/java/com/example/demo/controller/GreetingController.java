@@ -19,6 +19,7 @@ import com.service.GreetingService;
 import com.service.es.AccTradingFlowDayPo;
 import com.service.es.EsOpService;
 import com.service.hystrix.CommandHelloFailure;
+import com.service.hystrix.HystrixDemoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -49,6 +50,9 @@ public class GreetingController {
 
     @Autowired
     private EsOpService esOpService;
+
+    @Autowired
+    private HystrixDemoService hystrixDemoService;
 
     @ApiOperation(value = "greeting 方法")
     @RequestMapping(value = "/greeting", method = RequestMethod.GET)
@@ -90,5 +94,14 @@ public class GreetingController {
         new CommandHelloFailure(HystrixCommandGroupKey.Factory.asKey("ExampleGroup")).changeRunTest(value);
         return "success";
     }
+
+
+    @ApiOperation(value = "demo 方法")
+    @RequestMapping(value = "/demo", method = RequestMethod.GET)
+    public String demo(@ApiIgnore Context context, ParamDto paramDto) {
+        return hystrixDemoService.executeTest("mort");
+    }
+
+
 
 }

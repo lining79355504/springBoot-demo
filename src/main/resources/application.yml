@@ -6,10 +6,38 @@ spring:
   application:
     name: spring-boot-demo
   datasource:
+    master:
       url: jdbc:mysql://127.0.0.1:3306/cat?characterEncoding=utf-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/cat?useSSL=false&test=master&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
       username: root
       password: 123456
       driver-class-name: com.mysql.cj.jdbc.Driver
+      type:
+    datasource2:
+      url: jdbc:mysql://127.0.0.1:3306/cat?characterEncoding=utf-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/cat?useSSL=false&test=datasource2&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+    datasource3:
+      url: jdbc:mysql://127.0.0.1:3306/cat?characterEncoding=utf-8&useSSL=false
+      jdbc-url: jdbc:mysql://127.0.0.1:3306/cat?useSSL=false&test=datasource3&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+
+sharding:
+  jdbc:
+    datasource:
+      names: master,master
+      master:
+        url: jdbc:mysql://127.0.0.1:3306/cat?characterEncoding=utf-8&useSSL=false
+        jdbc-url: jdbc:mysql://127.0.0.1:3306/cat?useSSL=false&test=sharding-datasource&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true&useSSL=false&tinyInt1isBit=false&zeroDateTimeBehavior=convertToNull&serverTimezone=Asia/Shanghai
+        username: root
+        password: 123456
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+
 #  data:
 #    elasticsearch:
 #      cluster-name:
@@ -18,3 +46,4 @@ spring:
 mybatis:
   mapper-locations: classpath*:mapper/*Mapper.xml
   type-aliases-package: com.demo.entity
+
