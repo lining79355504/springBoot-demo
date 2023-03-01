@@ -17,6 +17,20 @@ import org.springframework.stereotype.Service;
  *             <version>${hystrix-version}</version>
  *         </dependency>
  *
+ *         引入 com.netflix.hystrix.contrib.javanica.aop.aspectj.HystrixCommandAspect 却面
+ *
+ *          @EnableAspectJAutoProxy
+ * @Configuration
+ * public class HystrixConfig {
+ *
+ *     @Bean
+ *     public HystrixCommandAspect hystrixAspect() {
+ *         return new HystrixCommandAspect();
+ *     }
+ *
+ *
+ * }
+ *
  *         支持  @HystrixCommand 注解使用
  *
  *         javanica适用于JDK和CGLIB代理
@@ -28,6 +42,7 @@ public class HystrixDemoService {
 
     @HystrixCommand(
             fallbackMethod = "executeTestFallBack",
+            ignoreExceptions = {Throwable.class},  //忽略异常 只有超时才会降级
             commandProperties = {
                     @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10")
 
@@ -35,6 +50,7 @@ public class HystrixDemoService {
     )
     public String executeTest(String name){
         try {
+            //模拟超时
             Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
