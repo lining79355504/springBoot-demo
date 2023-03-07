@@ -201,16 +201,19 @@
             <artifactId>hystrix-core</artifactId>
             <version>${hystrix-version}</version>
         </dependency>
+<!--        监控使用 对接cat等监控 实现监控告警-->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
             <artifactId>hystrix-metrics-event-stream</artifactId>
             <version>${hystrix-version}</version>
         </dependency>
+<!--        注解使用  @HystrixCommand-->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
             <artifactId>hystrix-javanica</artifactId>
             <version>${hystrix-version}</version>
         </dependency>
+<!--        -->
         <dependency>
             <groupId>com.netflix.hystrix</groupId>
             <artifactId>hystrix-servo-metrics-publisher</artifactId>

@@ -1,7 +1,12 @@
 package com.service.hystrix;
 
+import com.netflix.hystrix.HystrixCommandMetrics;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
+import com.netflix.hystrix.contrib.servopublisher.HystrixServoMetricsPublisher;
+import com.netflix.hystrix.strategy.eventnotifier.HystrixEventNotifierDefault;
+import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
+import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisherDefault;
 import org.springframework.stereotype.Service;
 
 /**
@@ -44,17 +49,31 @@ public class HystrixDemoService {
             fallbackMethod = "executeTestFallBack",
             ignoreExceptions = {Throwable.class},  //忽略异常 只有超时才会降级
             commandProperties = {
-                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10")
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10"),
+                    @HystrixProperty(name = "execution.isolation.semaphore.maxConcurrentRequests", value = "1"),
+                    @HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"), // 触发熔断 降级后 多久试一次原方法恢复没
+                    @HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50") // 失败比例占到多少value%后 触发熔断降级
 
             }
     )
     public String executeTest(String name){
         try {
+
+//            HystrixServoMetricsPublisher.getInstance().getMetricsPublisherForCommand()
             //模拟超时
-            Thread.sleep(1000);
+//            Thread.sleep(1000);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+//        HystrixEventNotifierDefault.getInstance()
+
+        HystrixMetricsPublisher instance = HystrixMetricsPublisherDefault.getInstance();
+
+
+
+
+
         return "run"+name;
     }
 

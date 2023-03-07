@@ -1,9 +1,12 @@
 package com.demo.config;
 
 import com.google.common.collect.Lists;
+import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
+import com.netflix.hystrix.contrib.sample.stream.HystrixUtilizationSseServlet;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -110,6 +113,24 @@ public class WebConfig implements WebMvcConfigurer {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", corsConfig());
         return new CorsFilter(source);
+    }
+
+    /**
+     * http://localhost:8080/spring_boot_demo_war_exploded/hystrix/utilization.stream
+     * @return
+     */
+    @Bean
+    public ServletRegistrationBean utilizationServletTLReportServlet() {
+        return new ServletRegistrationBean(new HystrixUtilizationSseServlet(), "/hystrix/utilization.stream");
+    }
+
+    /**
+     * http://localhost:8080/spring_boot_demo_war_exploded/hystrix/hystrix.stream
+     * @return
+     */
+    @Bean
+    public ServletRegistrationBean servletTLReportServlet() {
+        return new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix/hystrix.stream");
     }
 
 
