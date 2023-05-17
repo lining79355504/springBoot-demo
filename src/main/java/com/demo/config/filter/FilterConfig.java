@@ -1,5 +1,6 @@
 package com.demo.config.filter;
 
+import com.dianping.cat.servlet.CatFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +40,15 @@ public class FilterConfig {
 
     //如果有多个Filter，再写一个public FilterRegistrationBean registerOtherFilter(){...}即可。
 
+    @Bean
+    public FilterRegistrationBean registerCatFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new CatFilter());
+        registration.addUrlPatterns("/*");
+        registration.setName("catFilter");
+        registration.setOrder(2);  //值越小，Filter越靠前。
+        return registration;
+    }
 
     /**
      * 创建一个bean

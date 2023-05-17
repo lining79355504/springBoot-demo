@@ -1,4 +1,4 @@
-package utils;
+package com.demo.utils;
 
 import com.demo.config.OkhttpInterceptor;
 import okhttp3.*;

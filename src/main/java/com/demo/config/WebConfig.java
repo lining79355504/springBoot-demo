@@ -1,5 +1,6 @@
 package com.demo.config;
 
+import com.dianping.cat.servlet.CatFilter;
 import com.google.common.collect.Lists;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import com.netflix.hystrix.contrib.sample.stream.HystrixUtilizationSseServlet;
@@ -18,6 +19,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -40,6 +42,8 @@ public class WebConfig implements WebMvcConfigurer {
     private static final List<String> VALUE = Lists.newArrayList("*.baidu.com", "*.baidu.co");
 
     private static final List<String> DEFAULT_VALUE = Lists.newArrayList("*");
+
+    private String[] interceptorAntPatterns = {"/**"};
 
     @PostConstruct
     public void init() {
@@ -96,6 +100,15 @@ public class WebConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+    }
+
+
+    // 增加 cat interceptors
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+
+        registry.addInterceptor(new CatInterceptor())
+                .addPathPatterns("/**");
     }
 
     private CorsConfiguration corsConfig() {
