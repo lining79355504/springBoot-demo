@@ -42,6 +42,14 @@ public class GreetingController {
 
     private final AtomicLong counter = new AtomicLong();
 
+    //  @since 9  才有这种初始化方式
+//    private static Map<Integer, String> sortMap = Map.of(
+//            1,"2",
+//            2,"3",
+//            3,"4",
+//            4,"5"
+//    );
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
