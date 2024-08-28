@@ -68,6 +68,67 @@ public class GreetingController {
 //        MobileTagValue mobileTagValue = greetingService.getById(36926);
 //        return new GreetingDto(counter.incrementAndGet(),
 //                String.format(template, mobileTagValue.toString()), "test");
+
+        String str = "operator {\n" +
+                "  operator_id: 94002939\n" +
+                "  operator_name: \"\\344\\270\\211\\350\\277\\236\\351\\207\\215\\346\\236\\204-\\345\\271\\277\\345\\221\\212\\344\\270\\273\"\n" +
+                "  operator_type: 100\n" +
+                "  system_type: 2\n" +
+                "  bilibili_user_name: \"lining02\"\n" +
+                "}\n" +
+                "unit {\n" +
+                "  campaign_id: 1424170\n" +
+                "  unit_name: \"ln-app-download\"\n" +
+                "  promotion_content_type: PPC_APP_DOWNLOAD\n" +
+                "  launch_begin_date: \"2024-08-02\"\n" +
+                "  launch_time: \"111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111\"\n" +
+                "  budget: \"300\"\n" +
+                "  sales_mode {\n" +
+                "    base_target: BT_CPM\n" +
+                "    base_bid: \"0\"\n" +
+                "    cpa_target: CPA_APP_ACTIVE\n" +
+                "    cpa_bid: \"20\"\n" +
+                "  }\n" +
+                "  speed_mode: SPEED_NORMAL\n" +
+                "  app_package {\n" +
+                "    app_package_id: 54620\n" +
+                "  }\n" +
+                "  game {\n" +
+                "  }\n" +
+                "  live {\n" +
+                "  }\n" +
+                "  goods {\n" +
+                "  }\n" +
+                "  live_reserve {\n" +
+                "  }\n" +
+                "  target {\n" +
+                "    os {\n" +
+                "      os_target: OS_IOS\n" +
+                "      os_bili_client {\n" +
+                "      }\n" +
+                "    }\n" +
+                "    os {\n" +
+                "      os_target: OS_IPAD\n" +
+                "      os_bili_client {\n" +
+                "      }\n" +
+                "    }\n" +
+                "    crowd_pack {\n" +
+                "    }\n" +
+                "    arc_tag_interest {\n" +
+                "      tag_fuzzy_type: EXACT\n" +
+                "    }\n" +
+                "    arc_tag {\n" +
+                "      tag_fuzzy_type: EXACT\n" +
+                "    }\n" +
+                "    installed_user_filter {\n" +
+                "    }\n" +
+                "    intelligent_mass {\n" +
+                "    }\n" +
+                "    archive_content {\n" +
+                "    }\n" +
+                "  }\n" +
+                "  smart_key_word: 1\n" +
+                "}";
         logger.info("paramDto  {}", paramDto);
 
         List<AccTradingFlowDayPo> pos = new ArrayList<>();
