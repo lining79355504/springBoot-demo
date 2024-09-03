@@ -154,10 +154,15 @@ public class FunctionUtil {
                 .collect(Collectors.joining(delimiter));
     }
 
-    public void setNoNUll(BiConsumer<String, Object> consumer, Supplier supplier, String property) {
+    public <T> void setNoNull(BiConsumer<String, T> consumer, Supplier<T> supplier, String property) {
         if (null != supplier.get()) {
             consumer.accept(property, supplier.get());
         }
     }
 
+    public <R, T> void setNoNull(BiConsumer<R, T> consumer, Supplier<T> supplier, R property) {
+        if (null != supplier.get()) {
+            consumer.accept(property, supplier.get());
+        }
+    }
 }
