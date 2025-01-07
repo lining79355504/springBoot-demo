@@ -38,7 +38,7 @@ import java.util.stream.Stream;
 @RequestMapping("/backdoor")
 public class BackdoorController {
 
-    @Value("${backdoor.enable:true}")
+    @Value("${backdoor.enable:false}")
     private boolean enable;
 
     @Autowired

@@ -5,10 +5,7 @@ package com.example.demo.controller;
  * Date :  2019-07-10
  */
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import com.demo.entity.Context;
@@ -25,6 +22,7 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,6 +59,19 @@ public class GreetingController {
 
     @Autowired
     private HystrixDemoService hystrixDemoService;
+
+    /*
+
+
+    aigc.sensitive.keywords.map ={"封面图片低俗":{"身体特写：半乳、側乳特写","身体特写：锁骨（审核侧目前不再卡锁骨 故删去）","身体特写：乳沟","身体特写：胸部凸点或露点","身体特写：胸部遮挡","身体特写：圣涡、背部裸露","身体特写：胸部","身体特写：大腿","视觉聚焦：角度视觉聚焦-胸部","视觉聚焦：角度视觉聚焦-腿部","视觉聚焦：敏感部位故意遮挡导致聚焦-胸部","视觉聚焦：敏感部位故意遮挡导致聚焦-腿部","着装规范：半透明、镂空衣服","着装规范：湿身、半透明","着装规范：内衣","着装规范：短裙、短裤","着装规范：黑白丝","动作不雅：挤胸、托胸","动作不雅：翘臀、跪趴、叉腿","词汇：不良词汇","词汇：低俗词汇、低俗联想","词汇：法律禁止","词汇：低俗癖好","标题文案低俗"},              "封面视频低俗":{"身体特写：半乳、側乳特写","身体特写：锁骨（审核侧目前不再卡锁骨 故删去）","身体特写：乳沟","身体特写：胸部凸点或露点","身体特写：胸部遮挡","身体特写：圣涡、背部裸露","身体特写：胸部","身体特写：大腿","视觉聚焦：角度视觉聚焦-胸部","视觉聚焦：角度视觉聚焦-腿部","视觉聚焦：敏感部位故意遮挡导致聚焦-胸部","视觉聚焦：敏感部位故意遮挡导致聚焦-腿部","着装规范：半透明、镂空衣服","着装规范：湿身、半透明","着装规范：内衣","着装规范：短裙、短裤","着装规范：黑白丝","动作不雅：挤胸、托胸","动作不雅：翘臀、跪趴、叉腿","词汇：不良词汇","词汇：低俗词汇、低俗联想","词汇：法律禁止","词汇：低俗癖好","标题文案低俗"},                                                 "文案低俗-标题&描述":{"标题低俗","词汇：不良词汇"},          "商业/带货起飞":{"绝对化用语", "低俗-文案", "不文明用语"},        "广告法 、平台相关":{"常用内容：最高级、绝对化用语"}}
+
+    spel 表达式 高级用法
+    @Value("#{${aigc.sensitive.keywords.map}}")
+    private Map<String, Set<String>> AIGC_SENSITIVE_KEYWORDS_MAP;
+
+
+     */
+
 
     @ApiOperation(value = "greeting 方法")
     @RequestMapping(value = "/greeting", method = RequestMethod.GET)
