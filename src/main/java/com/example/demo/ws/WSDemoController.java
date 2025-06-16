@@ -134,6 +134,7 @@ public class WSDemoController {
             return;
         }
         try {
+            // 注意此处要加session 维度的锁 多线程并发的情况下 会报错
             session.getAsyncRemote().sendText("[" + Instant.now().toEpochMilli() + "] boardCast " + session.getId() + " " + message);
         } catch (Exception e) {
             LOGGER.error("error ", e);

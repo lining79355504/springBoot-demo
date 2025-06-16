@@ -85,7 +85,7 @@ public class GreetingController {
                 "  operator_name: \"\\344\\270\\211\\350\\277\\236\\351\\207\\215\\346\\236\\204-\\345\\271\\277\\345\\221\\212\\344\\270\\273\"\n" +
                 "  operator_type: 100\n" +
                 "  system_type: 2\n" +
-                "  bilibili_user_name: \"lining02\"\n" +
+                "   user_name: \"lining02\"\n" +
                 "}\n" +
                 "unit {\n" +
                 "  campaign_id: 1424170\n" +

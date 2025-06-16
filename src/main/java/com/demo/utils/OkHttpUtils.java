@@ -1,6 +1,6 @@
 package com.demo.utils;
 
-import com.demo.config.OkhttpInterceptor;
+import com.demo.config.plugins.OkhttpInterceptor;
 import okhttp3.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

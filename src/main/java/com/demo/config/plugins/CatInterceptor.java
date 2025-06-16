@@ -1,4 +1,4 @@
-package com.demo.config;
+package com.demo.config.plugins;
 
 import com.dianping.cat.CatConstants;
 import org.apache.commons.lang3.StringUtils;

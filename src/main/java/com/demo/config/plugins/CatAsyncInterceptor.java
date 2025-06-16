@@ -1,9 +1,8 @@
-package com.demo.config;
+package com.demo.config.plugins;
 
 import com.dianping.cat.CatConstants;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.servlet.AsyncHandlerInterceptor;
-import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 

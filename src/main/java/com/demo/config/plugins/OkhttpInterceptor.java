@@ -1,4 +1,4 @@
-package com.demo.config;
+package com.demo.config.plugins;
 
 import com.dianping.cat.Cat;
 import okhttp3.*;
