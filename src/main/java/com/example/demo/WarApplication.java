@@ -64,6 +64,8 @@ com.ailiaili.warp.spring.boot.autoconfigure.web.WarpHttpServerInterceptor
 
 
 
+  利用 arthas 查看调用链路  系统里生成的bean 是自己预期的么 打印bean的内容 fields
+
      war包方式
 
     @Override
