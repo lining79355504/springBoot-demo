@@ -2,7 +2,7 @@ package com.service.es;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.data.elasticsearch.core.index.AliasAction;
 import org.springframework.data.elasticsearch.core.index.AliasActionParameters;
@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author mort
@@ -26,30 +27,34 @@ import java.util.List;
  * <artifactId>spring-data-elasticsearch</artifactId>
  * <version>4.3.1</version>
  * </dependency>
- *
+ * <p>
  * <?xml version="1.0" encoding="UTF-8"?>
  * <beans xmlns="http://www.springframework.org/schema/beans"
- *        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- *        xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
- *        xsi:schemaLocation="http://www.springframework.org/schema/beans
- *        https://www.springframework.org/schema/beans/spring-beans-3.1.xsd
- *        http://www.springframework.org/schema/data/elasticsearch
- *        https://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
- *
- *   transport 配置 es 8.0 会移除
- *   <!--es dao repository 扫描 -- >
- *   <elasticsearch:repositories base-package="com.acme.repositories" />
- *     <!--transport 集群配置 -->
- *   <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300,someip:9300" />
- *
- *      <!--ElasticsearchTemplate bean-->
- *       <bean name="elasticsearchTemplateSkywalk" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
- *         <constructor-arg name="client" ref="client"/>
- *     </bean>
+ * xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ * xmlns:elasticsearch="http://www.springframework.org/schema/data/elasticsearch"
+ * xsi:schemaLocation="http://www.springframework.org/schema/beans
+ * https://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+ * http://www.springframework.org/schema/data/elasticsearch
+ * https://www.springframework.org/schema/data/elasticsearch/spring-elasticsearch-1.0.xsd">
+ * <p>
+ * transport 配置 es 8.0 会移除
+ * <!--es dao repository 扫描 -- >
+ * <elasticsearch:repositories base-package="com.acme.repositories" />
+ * <!--transport 集群配置 -->
+ * <elasticsearch:transport-client id="client" cluster-nodes="localhost:9300,someip:9300" />
+ * <p>
+ * <!--ElasticsearchTemplate bean-->
+ * <bean name="elasticsearchTemplateSkywalk" class="org.springframework.data.elasticsearch.core.ElasticsearchTemplate">
+ * <constructor-arg name="client" ref="client"/>
+ * </bean>
  * </beans>
+ * @Autowired private ElasticsearchTemplate elasticsearchTemplate;
  *
- *    @Autowired
- *    private ElasticsearchTemplate elasticsearchTemplate;
+ *
+ *
+ * 不要使用 ElasticsearchRestHighLevelClient，它已被 Elasticsearch 官方弃用。
+ * 使用 ElasticsearchClient 是 Spring Boot 3.2.x + Elasticsearch 8.x 的唯一官方支持方案。
+ * 所有新项目必须采用此方案，避免未来迁移成本。
  *
  **/
 public class EsDevUtils {
@@ -57,7 +62,7 @@ public class EsDevUtils {
     private static final Logger logger = LoggerFactory.getLogger(EsDevUtils.class);
 
     public void createIndexByMonth(Timestamp date, String indexName, String indexAliasesName,
-                                   int day, int shards, int replicas, ElasticsearchRestTemplate elasticsearchTemplate) {
+                                   int day, int shards, int replicas, ElasticsearchOperations elasticsearchTemplate) {
 
         Timestamp someDayAfterToday = new Timestamp(date.getTime() + day * 24 * 60 * 60 * 1000L);
         String newIndexName = indexName + "_" + new SimpleDateFormat("yyyy_MM").format(new Date(someDayAfterToday.getTime()));
@@ -85,7 +90,7 @@ public class EsDevUtils {
         }
     }
 
-    public void bulk(ElasticsearchRestTemplate elasticsearchTemplate, List<AccTradingFlowDayPo> datas) {
+    public void bulk(ElasticsearchOperations elasticsearchTemplate, List<AccTradingFlowDayPo> datas) {
         elasticsearchTemplate.save(datas);
     }
 

@@ -4,6 +4,7 @@ import com.demo.config.plugins.CatInterceptor;
 import com.google.common.collect.Lists;
 import com.netflix.hystrix.contrib.metrics.eventstream.HystrixMetricsStreamServlet;
 import com.netflix.hystrix.contrib.sample.stream.HystrixUtilizationSseServlet;
+import jakarta.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -20,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -129,19 +129,19 @@ public class WebConfig implements WebMvcConfigurer {
      * http://localhost:8080/spring_boot_demo_war_exploded/hystrix/utilization.stream
      * @return
      */
-    @Bean
-    public ServletRegistrationBean utilizationServletTLReportServlet() {
-        return new ServletRegistrationBean(new HystrixUtilizationSseServlet(), "/hystrix/utilization.stream");
-    }
-
-    /**
-     * http://localhost:8080/spring_boot_demo_war_exploded/hystrix/hystrix.stream
-     * @return
-     */
-    @Bean
-    public ServletRegistrationBean servletTLReportServlet() {
-        return new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix/hystrix.stream");
-    }
+//    @Bean
+//    public ServletRegistrationBean utilizationServletTLReportServlet() {
+//        return new ServletRegistrationBean(new HystrixUtilizationSseServlet(), "/hystrix/utilization.stream");
+//    }
+//
+//    /**
+//     * http://localhost:8080/spring_boot_demo_war_exploded/hystrix/hystrix.stream
+//     * @return
+//     */
+//    @Bean
+//    public ServletRegistrationBean servletTLReportServlet() {
+//        return new ServletRegistrationBean(new HystrixMetricsStreamServlet(), "/hystrix/hystrix.stream");
+//    }
 
 
 }

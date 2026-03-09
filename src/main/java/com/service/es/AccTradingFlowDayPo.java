@@ -23,7 +23,7 @@ import java.sql.Timestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(indexName = "acc_account_trading_flow_day_v1", shards = 3, indexStoreType = "base")
+@Document(indexName = "acc_account_trading_flow_day_v1")
 //1 spring data es 如果没有索引 第一次会新建索引
 // 7.0 后移除了type  之前会默认给一个type 为base的类型
 public class AccTradingFlowDayPo {

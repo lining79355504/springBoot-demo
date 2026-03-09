@@ -3,6 +3,7 @@ package com.service.es;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.PostConstruct;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
@@ -20,11 +21,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.elasticsearch.core.ElasticsearchRestTemplate;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,12 +41,12 @@ public class EsOpService {
 
      private static final Logger logger = LoggerFactory.getLogger(EsOpService.class);
 
-    @Qualifier("elasticsearchClientAlpha")
-    @Autowired
-    RestHighLevelClient highLevelClient;
+//    @Qualifier("elasticsearchClientAlpha")
+//    @Autowired
+//    RestHighLevelClient highLevelClient;
 
 
-    private ElasticsearchRestTemplate elasticsearchRestTemplate;
+    private ElasticsearchOperations elasticsearchRestTemplate;
 
     /**
      * @param entity
@@ -75,7 +75,8 @@ public class EsOpService {
         searchRequest.source(searchSourceBuilder);
 
         try {
-            SearchResponse searchResponse = highLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+//            SearchResponse searchResponse = highLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse searchResponse = null;
             String scrollId = searchResponse.getScrollId();
             logger.info("scrollId {} ", scrollId);
             for (org.elasticsearch.search.SearchHit hit : searchResponse.getHits().getHits()) {
@@ -91,7 +92,8 @@ public class EsOpService {
                 SearchScrollRequest searchScrollRequest = new SearchScrollRequest(scrollId);
                 searchScrollRequest.scroll(TimeValue.timeValueMinutes(scrollMinutes));
 
-                SearchResponse scroll = highLevelClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+//                SearchResponse scroll = highLevelClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+                SearchResponse scroll = null;
 
                 scrollId = scroll.getScrollId();
 
@@ -145,7 +147,9 @@ public class EsOpService {
         );
 
         try {
-            highLevelClient.bulk(request, RequestOptions.DEFAULT);
+//            highLevelClient.bulk(request, RequestOptions.DEFAULT);
+//            highLevelClient.bulk(request, RequestOptions.DEFAULT);
+            throw new IOException("error");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -169,10 +173,10 @@ public class EsOpService {
      */
     @PostConstruct
     public void setElasticsearchRestTemplate() {
-        this.elasticsearchRestTemplate = new ElasticsearchRestTemplate(highLevelClient);
+//        this.elasticsearchRestTemplate = new ElasticsearchOperations(highLevelClient);
     }
 
-    public ElasticsearchRestTemplate getElasticsearchRestTemplate() {
+    public ElasticsearchOperations getElasticsearchRestTemplate() {
         return elasticsearchRestTemplate;
     }
 }

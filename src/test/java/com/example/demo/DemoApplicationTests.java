@@ -22,10 +22,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.client.elc.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.*;
 import org.springframework.data.elasticsearch.core.mapping.IndexCoordinates;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
-import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.IOException;
@@ -43,173 +42,170 @@ import static org.elasticsearch.index.query.QueryBuilders.rangeQuery;
 @SpringBootTest
 public class DemoApplicationTests {
 
-	 private static final Logger logger = LoggerFactory.getLogger(DemoApplicationTests.class);
+    private static final Logger logger = LoggerFactory.getLogger(DemoApplicationTests.class);
 
 
-	@Autowired
-	private ElasticsearchTemplate elasticsearchTemplate;
+//	@Autowired
+//	private ElasticsearchTemplate elasticsearchTemplate;
 
-	@Autowired
-	RestHighLevelClient highLevelClient;
+//	@Autowired
+//	RestHighLevelClient highLevelClient;
 
-	@Autowired
-	private EsOpService esOpService;
-
-
-	@Autowired
-	private ElasticsearchRestTemplate elasticsearchRestTemplate;
-
-	@Autowired
-	private TradingFlowDataToEsRepository tradingFlowDataToEsRepository;
-
-	@Test
-	public void contextLoads() {
-	}
-
-	@Test
-	public void highLevelClientTest(){
-
-		List<AccTradingFlowDayPo> pos = new ArrayList<>();
-		for (int i = 0; i < 1000; i++) {
-			pos.add(AccTradingFlowDayPo.builder()
-					.id(String.valueOf(UUID.randomUUID().hashCode()))
-					.cash_balance(0L)
-					.account_id(1)
-					.ctime(new Timestamp(System.currentTimeMillis()))
-					.mtime(new Timestamp(System.currentTimeMillis()))
-					.build());
-		}
-		esOpService.bulk("acc_account_trading_flow_day_v1", pos);
-	}
+    @Autowired
+    private EsOpService esOpService;
 
 
+//	@Autowired
+//	private ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-	@Test
-	public void esSave(){
-		List<AccTradingFlowDayPo> esData = new ArrayList<>();
-		//根据_id insert or update 索引根据po里的设置注解获取 index之后会refresh
-		tradingFlowDataToEsRepository.saveAll(esData);
+    @Autowired
+    private TradingFlowDataToEsRepository tradingFlowDataToEsRepository;
 
-		BoolQueryBuilder queryBuilder = boolQuery();
-		RangeQueryBuilder rangeQueryBuilder = rangeQuery("ctime")
-				.from(System.currentTimeMillis())
-				.to(System.currentTimeMillis());
-		queryBuilder.must(rangeQueryBuilder);
+    @Test
+    public void contextLoads() {
+    }
 
-		NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
-//				.withIndices("acc_creative_day")
-				.withQuery(queryBuilder).build();
-		// scroll delete_by_query
-		elasticsearchRestTemplate.delete(searchQuery, AccTradingFlowDayPo.class);
+    @Test
+    public void highLevelClientTest() {
+
+        List<AccTradingFlowDayPo> pos = new ArrayList<>();
+        for (int i = 0; i < 1000; i++) {
+            pos.add(AccTradingFlowDayPo.builder()
+                    .id(String.valueOf(UUID.randomUUID().hashCode()))
+                    .cash_balance(0L)
+                    .account_id(1)
+                    .ctime(new Timestamp(System.currentTimeMillis()))
+                    .mtime(new Timestamp(System.currentTimeMillis()))
+                    .build());
+        }
+        esOpService.bulk("acc_account_trading_flow_day_v1", pos);
+    }
 
 
+    @Test
+    public void esSave() {
+        List<AccTradingFlowDayPo> esData = new ArrayList<>();
+        //根据_id insert or update 索引根据po里的设置注解获取 index之后会refresh
+        tradingFlowDataToEsRepository.saveAll(esData);
 
-		//指定索引保存 不refresh
-		elasticsearchRestTemplate.save(esData, IndexCoordinates.of("acc_account_trading_flow_day_v1"));
+        BoolQueryBuilder queryBuilder = boolQuery();
+        RangeQueryBuilder rangeQueryBuilder = rangeQuery("ctime")
+                .from(System.currentTimeMillis())
+                .to(System.currentTimeMillis());
+        queryBuilder.must(rangeQueryBuilder);
+
+//		NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+////				.withIndices("acc_creative_day")
+//				.withQuery(queryBuilder).build();
+//		// scroll delete_by_query
+//		elasticsearchRestTemplate.delete(searchQuery, AccTradingFlowDayPo.class);
+
+
+        //指定索引保存 不refresh
+//		elasticsearchRestTemplate.save(esData, IndexCoordinates.of("acc_account_trading_flow_day_v1"));
 //		tradingFlowDataToEsRepository.deleteById();  es 删除并不释放磁盘 只是不能查到 发生index merge后才会删除
 
 
+        // scroll query
+        IndexCoordinates index = IndexCoordinates.of("sample-index");
+//		NativeSearchQuery scrollSearchQuery = new NativeSearchQueryBuilder()
+//				.withQuery(rangeQueryBuilder)
+//				.withFields("message")
+//				.withPageable(PageRequest.of(0, 10))
+//				.build();
+
+//		SearchHitsIterator<AccTradingFlowDayPo> stream = elasticsearchTemplate.searchForStream(scrollSearchQuery, AccTradingFlowDayPo.class, index);
+
+        SearchHitsIterator<AccTradingFlowDayPo> stream = null;
+        List<AccTradingFlowDayPo> sampleEntities = new ArrayList<>();
+        while (stream.hasNext()) {
+            SearchHit<AccTradingFlowDayPo> next = stream.next();
+            AccTradingFlowDayPo content = next.getContent();
+            sampleEntities.add(content);
+        }
+        stream.close();
 
 
-		// scroll query
-		IndexCoordinates index = IndexCoordinates.of("sample-index");
-		NativeSearchQuery scrollSearchQuery = new NativeSearchQueryBuilder()
-				.withQuery(rangeQueryBuilder)
-				.withFields("message")
-				.withPageable(PageRequest.of(0, 10))
-				.build();
+        // scroll查询 可以获取带scrollId的操作
+//		SearchScrollHits<AccTradingFlowDayPo> scroll = elasticsearchTemplate.searchScrollStart(1000, searchQuery, AccTradingFlowDayPo.class, index);
+        SearchScrollHits<AccTradingFlowDayPo> scroll = null;
 
-		SearchHitsIterator<AccTradingFlowDayPo> stream = elasticsearchTemplate.searchForStream(scrollSearchQuery, AccTradingFlowDayPo.class, index);
-
-		List<AccTradingFlowDayPo> sampleEntities = new ArrayList<>();
-		while (stream.hasNext()) {
-			SearchHit<AccTradingFlowDayPo> next = stream.next();
-			AccTradingFlowDayPo content = next.getContent();
-			sampleEntities.add(content);
-		}
-		stream.close();
+        String scrollId = scroll.getScrollId();
+        List<AccTradingFlowDayPo> sampleEntities1 = new ArrayList<>();
+        while (scroll.hasSearchHits()) {
+            List<SearchHit<AccTradingFlowDayPo>> searchHits = scroll.getSearchHits();
+            List<AccTradingFlowDayPo> flowDayPos = searchHits.stream().map(r -> r.getContent()).collect(Collectors.toList());
+            sampleEntities1.addAll(flowDayPos);
+            scrollId = scroll.getScrollId();
+//			scroll = elasticsearchTemplate.searchScrollContinue(scrollId, 1000, AccTradingFlowDayPo.class, index);
+            scroll = null;
+        }
+//		elasticsearchTemplate.searchScrollClear(Lists.newArrayList(scrollId));
 
 
+        SearchRequest searchRequest = new SearchRequest("acc_account_trading_flow_day_v1");
+        searchRequest.scroll(TimeValue.timeValueMinutes(2L));
 
-		// scroll查询 可以获取带scrollId的操作
-		SearchScrollHits<AccTradingFlowDayPo> scroll = elasticsearchTemplate.searchScrollStart(1000, searchQuery, AccTradingFlowDayPo.class, index);
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        ///3、指定每页查询条数
+        searchSourceBuilder.size(20);
+        //3.1、排序
+        searchSourceBuilder.sort("id", SortOrder.ASC);
+        //3.2、查询全部
+        searchSourceBuilder.query(QueryBuilders.matchAllQuery());
 
-		String scrollId = scroll.getScrollId();
-		List<AccTradingFlowDayPo> sampleEntities1 = new ArrayList<>();
-		while (scroll.hasSearchHits()) {
-			List<SearchHit<AccTradingFlowDayPo>> searchHits = scroll.getSearchHits();
-			List<AccTradingFlowDayPo> flowDayPos = searchHits.stream().map(r -> r.getContent()).collect(Collectors.toList());
-			sampleEntities1.addAll(flowDayPos);
-			scrollId = scroll.getScrollId();
-			scroll = elasticsearchTemplate.searchScrollContinue(scrollId, 1000, AccTradingFlowDayPo.class, index);
-		}
-		elasticsearchTemplate.searchScrollClear(Lists.newArrayList(scrollId));
+        searchRequest.source(searchSourceBuilder);
 
-
-
-		SearchRequest searchRequest = new SearchRequest("acc_account_trading_flow_day_v1");
-		searchRequest.scroll(TimeValue.timeValueMinutes(2L));
-
-		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
-		///3、指定每页查询条数
-		searchSourceBuilder.size(20);
-		//3.1、排序
-		searchSourceBuilder.sort("id", SortOrder.ASC);
-		//3.2、查询全部
-		searchSourceBuilder.query(QueryBuilders.matchAllQuery());
-
-		searchRequest.source(searchSourceBuilder);
-
-		try {
-			SearchResponse searchResponse = highLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-			String scrollId1 = searchResponse.getScrollId();
-			logger.info("scrollId1 {} ", scrollId1);
-			for (org.elasticsearch.search.SearchHit hit : searchResponse.getHits().getHits()) {
-				//4.1、首页数据
-				Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+        try {
+//			SearchResponse searchResponse = highLevelClient.search(searchRequest, RequestOptions.DEFAULT);
+            SearchResponse searchResponse = null;
+            String scrollId1 = searchResponse.getScrollId();
+            logger.info("scrollId1 {} ", scrollId1);
+            for (org.elasticsearch.search.SearchHit hit : searchResponse.getHits().getHits()) {
+                //4.1、首页数据
+                Map<String, Object> sourceAsMap = hit.getSourceAsMap();
 //				list.add(sourceAsMap);
-			}
+            }
 
 
-			while (true){
-				SearchScrollRequest searchScrollRequest = new SearchScrollRequest(scrollId1);
-				searchScrollRequest.scroll(TimeValue.timeValueMinutes(2L));
+            while (true) {
+                SearchScrollRequest searchScrollRequest = new SearchScrollRequest(scrollId1);
+                searchScrollRequest.scroll(TimeValue.timeValueMinutes(2L));
 
-				SearchResponse scroll1 = highLevelClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
-				org.elasticsearch.search.SearchHit[] hits = scroll1.getHits().getHits();
+//				SearchResponse scroll1 = highLevelClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+                SearchResponse scroll1 = null;
+                org.elasticsearch.search.SearchHit[] hits = scroll1.getHits().getHits();
 
-				if (null == hits || hits.length < 1) {
-					break;
-				}
+                if (null == hits || hits.length < 1) {
+                    break;
+                }
 
-				for (org.elasticsearch.search.SearchHit hit : hits) {
-					Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-					//				list.add(sourceAsMap);
-				}
-			}
+                for (org.elasticsearch.search.SearchHit hit : hits) {
+                    Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                    //				list.add(sourceAsMap);
+                }
+            }
 
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-
-	}
+            throw new IOException("");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
 
+    }
 
 
-	public <T> void test(String indexName, List<T> pos) {
+    public <T> void test(String indexName, List<T> pos) {
 
-	}
+    }
 
 
-	public <E, T> void test1(String indexName, T t) {
+    public <E, T> void test1(String indexName, T t) {
 
-	}
+    }
 
-	public String test1(String indexName, List<?> t) {
+    public String test1(String indexName, List<?> t) {
 
-		return null;
-	}
+        return null;
+    }
 }

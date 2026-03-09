@@ -40,15 +40,15 @@ public class FilterConfig {
 
     //如果有多个Filter，再写一个public FilterRegistrationBean registerOtherFilter(){...}即可。
 
-    @Bean
-    public FilterRegistrationBean registerCatFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new CatFilter());
-        registration.addUrlPatterns("/*");
-        registration.setName("catFilter");
-        registration.setOrder(2);  //值越小，Filter越靠前。
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean registerCatFilter() {
+//        FilterRegistrationBean registration = new FilterRegistrationBean();
+//        registration.setFilter(new CatFilter());
+//        registration.addUrlPatterns("/*");
+//        registration.setName("catFilter");
+//        registration.setOrder(2);  //值越小，Filter越靠前。
+//        return registration;
+//    }
 
     /**
      * 创建一个bean
