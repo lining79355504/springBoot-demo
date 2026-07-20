@@ -59,7 +59,7 @@ public class SnowflakeIdConfig {
                     log.info("snowflakeIdWorker init heartLockBeat data_center_id {}",  DATA_CENTER_ID.get());
                     Thread.sleep(1000 * 5);
                 } catch (Exception e) {
-                    log.error("snowflakeIdWorker heartLockBeat error", e);
+//                    log.error("snowflakeIdWorker heartLockBeat error", e);
                 }
             }
         }).start();

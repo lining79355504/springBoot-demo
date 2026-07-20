@@ -194,6 +194,14 @@
             <artifactId>spring-data-elasticsearch</artifactId>
         </dependency>
 
+
+        <!-- Spring Context 支持 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+<!--            <version>5.3.10</version> &lt;!&ndash; 使用适合你项目的版本 &ndash;&gt;-->
+        </dependency>
+
         <dependency>
             <groupId>com.dianping.cat</groupId>
             <artifactId>cat-client</artifactId>

@@ -9,6 +9,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.List;
@@ -22,8 +23,9 @@ import java.util.List;
  **/
 @MapperScan("com.demo.dao")
 @EnableSwagger2
+@EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
-@SpringBootApplication(scanBasePackages = {"com.example", "com.service", "com.demo", "io.shardingsphere.transaction.aspect"})
+@SpringBootApplication(scanBasePackages = {"com.example", "com.service", "com.instruct", "com.demo", "io.shardingsphere.transaction.aspect"})
 public class WarApplication extends SpringBootServletInitializer {
 
     //war包方式
