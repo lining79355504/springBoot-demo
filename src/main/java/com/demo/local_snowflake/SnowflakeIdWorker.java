@@ -8,6 +8,8 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Enumeration;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Snowflake分布式ID生成器
@@ -93,6 +95,16 @@ public class SnowflakeIdWorker {
      */
     private long lastTimestamp = -1L;
 
+    /**
+     * 由租约管理方控制。租约丢失后必须停止发号，避免与新持有者产生重复 ID。
+     */
+    private final AtomicBoolean available = new AtomicBoolean(true);
+
+    /**
+     * 默认无限期有效；由分布式租约管理器设置一个保守的失效时间。
+     */
+    private final AtomicLong leaseDeadlineMillis = new AtomicLong(Long.MAX_VALUE);
+
     //==============================Constructors=====================================
 
     /**
@@ -168,6 +180,10 @@ public class SnowflakeIdWorker {
      */
     public synchronized long nextId() {
         long timestamp = timeGen();
+        if (!available.get() || timestamp >= leaseDeadlineMillis.get()) {
+            available.set(false);
+            throw new IllegalStateException("Snowflake ID worker is unavailable because its lease has been lost");
+        }
 
         //如果当前时间小于上一次ID生成的时间戳，说明系统时钟回退过这个时候应当抛出异常
         if (timestamp < lastTimestamp) {
@@ -240,6 +256,24 @@ public class SnowflakeIdWorker {
      */
     public long getWorkerId() {
         return workerId;
+    }
+
+    /**
+     * 不可逆地停止发号。租约失效后不能重新启用旧 worker，因为数据中心 ID
+     * 可能已经被其他实例取得。
+     */
+    public void markUnavailable() {
+        available.set(false);
+    }
+
+    /**
+     * 在租约真正到期前设置保守截止时间。这样即使续约线程被长时间暂停，
+     * 当前实例也会先停止发号，不会与取得过期租约的新实例重叠。
+     *
+     * @param deadlineMillis 可继续发号的截止时间（毫秒）
+     */
+    public void updateLeaseDeadline(long deadlineMillis) {
+        leaseDeadlineMillis.set(deadlineMillis);
     }
 
     public static void main(String[] args) {
